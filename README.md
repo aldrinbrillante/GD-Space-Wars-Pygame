@@ -1,7 +1,7 @@
 # GD-Space-Wars-Pygame
  Space Wars Python Gaming Project
 
-## For this assignment you will need to complete the following requirements:
+## For this project, these are the following requirements:
 
 - At least four classes are defined
 - Each class has a least 2 properties created in init()
