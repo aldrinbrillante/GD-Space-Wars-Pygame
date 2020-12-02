@@ -17,4 +17,4 @@
 
 
 Pseudocode/Self Notes:
-- all variables will be in ALL_CAPITAL_LETTERS
+- all constants/variables will be in ALL_CAPITAL_LETTERS
