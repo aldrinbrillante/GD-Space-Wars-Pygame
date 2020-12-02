@@ -14,3 +14,7 @@
 - At least one class inherits from another class
 - The subclass overrides at least one superclass method (this can be init or another method)
 - 5 - 10 min demo presentation is given showing off all of the above requirements
+
+
+Pseudocode/Self Notes:
+- all variables will be in ALL_CAPITAL_LETTERS

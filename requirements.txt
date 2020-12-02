@@ -1,4 +1,7 @@
-import pygame
-import os
-import random
-import time
+install/import pygame # pip3 install pygame
+
+install/import os #pip3 install os
+
+install/import random
+
+install/import time
