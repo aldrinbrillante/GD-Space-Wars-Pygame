@@ -3,14 +3,14 @@
 # All constants/variables will be in ALL_CAPITAL_LETTERS
 
 
-import pygame
+import pygame # documentation: https://www.pygame.org/docs/
 import os
 import time
 import random
 
 
 ############################################################################################
-# TASK: Setup Pygame window
+# TASK 1: Setup Pygame window and its dimensions
 ############################################################################################
 '''
 Needed for Pygame window:
@@ -26,7 +26,7 @@ WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Space Wars")
 
 ############################################################################################
-# TASK: Load all images into the script
+# TASK 2: Load all images into the script
 ############################################################################################
 '''
 Pseudocode translate:
