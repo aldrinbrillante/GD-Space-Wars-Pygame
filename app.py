@@ -59,6 +59,8 @@ BG = pygame.transform.scale(pygame.image.load(os.path.join("imgs", "space_bg.png
 # TASK 3: Setup Ship Class
 ############################################################################################
 class Ship: #abstract class. wont be used but only INHERITED
+    COOLDOWN = 30 #used for later 
+
     def __init__(self, x, y, health=100):
         #attributes
         self.x = x
@@ -71,6 +73,18 @@ class Ship: #abstract class. wont be used but only INHERITED
 
     def draw(self, window): # method 
         window.blit(self.ship_img, (self.x, self.y))
+
+    def cooldown(self): #handles counting the cooldown
+        if self.cool_down_counter >= self.COOLDOWN:
+            self.cool_down_counter = 0 #not doing anything
+        elif self.cool_down_counter > 0: #if it is greater than 0
+            self.cool_down_counter += 1 #increment by 1
+
+    def shoot(self):
+        if self.cool_down_counter == 0: # we're not in the process of counting up to a specific cooldown
+            laser = Laser(self.x-20, self.y, self.laser_img) #create a new laser...
+            self.lasers.append(laser) #... and add it to the laser list
+            self.cool_down_counter = 1 #then set the cooldown counter to start counting up 
 
     def get_width(self): #func to get width of hero
         return self.ship_img.get_width()
@@ -101,9 +115,32 @@ class Enemy(Ship):
     def move(self, vel): # if we pass the velocity to this method, we move the ship 
         self.y += vel
     
+def collide(obj1, obj2): #checks to see an overlap 
+    offset_x = obj2.x - obj1.x #  this tells us the diff from object 1 and object 2
+    offset_y = obj2.y - obj1.y
+    return obj1.mask.overlap(obj2.mask, (offset_x, offset_y)) != None
 
+################################
+# Laser Class
+################################
+class Laser:
+    def __init__(self, x, y, img):
+        self.x = x
+        self.y = y
+        self.img = img
+        self.mask = pygame.mask.from_surface(self.img)
 
+    def draw(self, window):
+        window.blit(self.img, (self.x, self.y))
+    
+    def move(self, vel):
+        self.y += vel
 
+    def off_screen(self, height):
+        return not(self.y <= height and self.y >= 0) #checks if laser is off
+
+    def collision(self, obj):
+        return collide(self, obj)
 
 
 ############################################################################################
@@ -117,16 +154,20 @@ def main():
     level = 0
     lives = 3
     main_font = pygame.font.SysFont("comicsans", 50) #pygame font type and size 
+    lost_font = pygame.font.SysFont("comicsans", 200) #pygame font type and size for lost game
     hero_vel = 5 #velocity of hero --> to be called during 'if keys'
 
     enemies = [] #stores our enemies
     wave_length = 5
-    enemy_vel = 1 #enemy velocity 1 pixel 
+    enemy_vel = 5 #enemy velocity 1 pixel 
 
     #create hero variable with hero class and coordinates
     hero = Hero(300, 650)
 
     clock = pygame.time.Clock() # used to setup actual FPS
+
+    lost = False #lost variable
+    lost_count = 0
 
     def redraw_window():
         WINDOW.blit(BG, (0, 0)) #blit allows make WINDOW surface to be placed/located at said coordinate: 0,0
@@ -145,17 +186,36 @@ def main():
 
         hero.draw(WINDOW)
 
+        if lost:
+            lost_label = lost_font.render("GAME OVER!!", 1, (255,255,255))
+            WINDOW.blit(lost_label, (WIDTH/2 - lost_label.get_width()/2, 350)) #centered in the screen
+
         #update window
         pygame.display.update() #refreshes the display 
  
 
     while run: 
-        clock.tick(FPS) #'tick this clock based on the FPS rate given'
+        clock.tick(FPS) #'tick this clock based on the FPS rate given
+
+        #calling redraw_window
+        redraw_window()
+
+        if lives <= 0 or hero.health <= 0:
+            lost = True
+            lost_count += 1 
+        
+        if lost:
+            if lost_count > FPS * 5:
+                run = False # if lost_count is greater than 5 secs, quits the game
+            else:
+                continue
 
         if len(enemies) == 0:
             level =+ 1 # as soon as no more enemies, level increases
             wave_length =+ 5
             for i in range(wave_length):
+                enemy = Enemy(random.randrange(50, WIDTH-100), random.randrange(-1500, -100), random.choice(["red", "blue", "green"])) #spawns enemy at max left side of 50 and max right side of width-100
+                enemies.append(enemy) #appends enemies
 
 
         #for loop to quit pygame window
@@ -177,6 +237,11 @@ def main():
             hero.y -= hero_vel # subtracts the velocity bs starting position is 0,0 at top left
         if keys[pygame.K_s] and hero.y + hero_vel + hero.get_height() < HEIGHT: #down - if current y value + velocity is less thatn HEIGHT, then you can move
             hero.y += hero_vel
+        #################################
+        # hero's shoots with SPACE
+        #################################
+        if keys[pygame.K_SPACE]:
+            hero.shoot()
         
         #########################################################
         # hero's movements with LEFT , RIGHT, UP, DOWN
@@ -190,8 +255,12 @@ def main():
         if keys[pygame.K_DOWN] and hero.y + hero_vel + hero.get_height() < HEIGHT: #down
             hero.y += hero_vel
 
-        #calling redraw_window
-        redraw_window()
+        # move the enemies
+        for enemy in enemies[:]:
+            enemy.move(enemy_vel) #moving them down by their said velocity
+            if enemy.y + enemy.get_height() > HEIGHT: #if enemy passes the bottom of screen
+                lives -= 1 #subtract hero lives
+                enemies.remove(enemy) #removes object from enemies list
 
 main()
 
