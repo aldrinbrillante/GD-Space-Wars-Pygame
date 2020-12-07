@@ -77,7 +77,7 @@ class Hero(Ship):
         super().__init__(x, y, health)
         self.hero = HERO
         self.laser_img = HERO_LASER
-        self.mask = pygame.mask.from_surface(self.ship_img) #mask allows for pixel perfect collision 
+        self.mask = pygame.mask.from_surface(self.hero) #mask allows for pixel perfect collision 
         self.max_health = health
 
 
