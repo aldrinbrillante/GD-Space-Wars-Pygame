@@ -22,8 +22,27 @@ WIDTH = 750
 HEIGHT = 750 
 WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
 
-# set title of gaming window
+# set title of gaming WINDOW
 pygame.display.set_caption("Space Wars")
+
+# drawing/ getting main loop setup to handle events
+def main():
+    run = True # dictates whether while loop below will run or not
+    FPS = 60 #frames per second variable
+    #setup actual FPS
+    clock = pygame.time.Clock()
+
+    def redraw_window():
+
+    while run: 
+        clock.tick(FPS) #'tick this clock based on the FPS rate given'
+
+        #for loop to quit pygame window
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False #when user quits the screen, then pygame stops running 
+
+main()
 
 ############################################################################################
 # TASK 2: Load all images into the script
