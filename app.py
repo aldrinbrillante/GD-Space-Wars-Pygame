@@ -64,13 +64,21 @@ class Ship: #abstract class. wont be used but only INHERITED
         self.x = x
         self.y = y
         self.health = health
-        self.ship_img = None #this will allow us to draw the img later
+        self.hero = None #this will allow us to draw the img later
         self.laser_img = None #this will allow us to draw the img later
         self.lasers = []
         self.cool_down_counter = 0 #created so user can't spam lasers during game
 
     def draw(self, window): # method 
-        pygame.draw.rect(window, (255,0,0), (self.x, self.y, 50, 50), 2)
+        window.blit(self.hero, (self.x, self.y))
+
+class Hero(Ship):
+    def __init__(self, x, y, health=100):
+        super().__init__(x, y, health)
+        self.hero = HERO
+        self.laser_img = HERO_LASER
+        self.mask = pygame.mask.from_surface(self.ship_img) #mask allows for pixel perfect collision 
+        self.max_health = health
 
 
 
@@ -126,27 +134,26 @@ def main():
         #################################
         # hero's movements with WASD
         #################################
-        if keys[pygame.K_a]: #left
+        if keys[pygame.K_a] and ship.x - hero_vel > 0: #left
             #to move left i need to subtract from my x value of my player
             ship.x -= hero_vel # move {hero_vel} pixels to the left
-        if keys[pygame.K_d]: #right
+        if keys[pygame.K_d] and ship.x + hero_vel < WIDTH: #right
             ship.x += hero_vel
-        if keys[pygame.K_w]: #up
+        if keys[pygame.K_w] and ship.y - hero_vel > 0: #up - this makes sure we are not less than 0 when moving up
             ship.y -= hero_vel # subtracts the velocity bs starting position is 0,0 at top left
-        if keys[pygame.K_s]: #down
+        if keys[pygame.K_s] and ship.y + hero_vel < HEIGHT: #down - if current y value + velocity is less thatn HEIGHT, then you can move
             ship.y += hero_vel
         
         #########################################################
         # hero's movements with LEFT , RIGHT, UP, DOWN
         #########################################################
-        if keys[pygame.K_LEFT]: #left
-            #to move left i need to subtract from my x value of my player
-            ship.x -= hero_vel # move {hero_vel} pixels to the left
-        if keys[pygame.K_RIGHT]: #right
+        if keys[pygame.K_LEFT] and ship.x - hero_vel > 0: #left
+            ship.x -= hero_vel 
+        if keys[pygame.K_RIGHT] and ship.x + hero_vel < WIDTH: #right
             ship.x += hero_vel
-        if keys[pygame.K_UP]: #up
-            ship.y -= hero_vel # subtracts the velocity bs starting position is 0,0 at top left
-        if keys[pygame.K_DOWN]: #down
+        if keys[pygame.K_UP] and ship.y - hero_vel > 0: #up 
+            ship.y -= hero_vel 
+        if keys[pygame.K_DOWN] and ship.y + hero_vel < HEIGHT: #down
             ship.y += hero_vel
 
 
