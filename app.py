@@ -124,6 +124,12 @@ class Hero(Ship):
                         objs.remove(obj)
                         if laser in self.lasers:
                             self.lasers.remove(laser)
+    
+    def healthbar(self, window):
+        #drew rectangles red and green based on health of hero
+        pygame.draw.rect(window, (255,0,0), (self.x, self.y + self.ship_img.get_height() + 10, self.ship_img.get_width(), 10))
+        pygame.draw.rect(window, (0,255,0), (self.x, self.y + self.ship_img.get_height() + 10, self.ship_img.get_width() * (self.health/self.max_health), 10))
+
 
 
 class Enemy(Ship):
@@ -180,11 +186,13 @@ def main():
     lives = 3
     main_font = pygame.font.SysFont("comicsans", 50) #pygame font type and size 
     lost_font = pygame.font.SysFont("comicsans", 200) #pygame font type and size for lost game
-    hero_vel = 5 #velocity of hero --> to be called during 'if keys'
 
     enemies = [] #stores our enemies
     wave_length = 5
-    enemy_vel = 5 #enemy velocity 1 pixel 
+
+    hero_vel = 5 #velocity of hero --> to be called during 'if keys'
+    enemy_vel = 3 #enemy velocity 1 pixel 
+    laser_vel = 4
 
     #create hero variable with hero class and coordinates
     hero = Hero(300, 650)
@@ -283,9 +291,26 @@ def main():
         # move the enemies
         for enemy in enemies[:]:
             enemy.move(enemy_vel) #moving them down by their said velocity
+            enemy.move_lasers(laser_vel, hero) #move it by velocity of laser and check if it hits hero
+
+            #enemy shooting
+            if random.randrange(0, 2*60) == 1: # 2*60 frames per second = 50% chance of shooting 
+                enemy.shoot()
+            
+            # collision between player and ships
+            if collide(enemy, hero):
+                hero.health -= 10
+                enemies.remove(enemy)
+            elif enemy.y + enemy.get_height() > HEIGHT:
+                lives -= 1
+                enemies.remove(enemy)
+
             if enemy.y + enemy.get_height() > HEIGHT: #if enemy passes the bottom of screen
                 lives -= 1 #subtract hero lives
                 enemies.remove(enemy) #removes object from enemies list
+
+        
+        hero.move_lasers(-laser_vel, enemies) # this checks if laser has collided with any of the enemies...negative to make sure laser goes up
 
 main()
 
