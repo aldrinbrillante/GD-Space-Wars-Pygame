@@ -59,7 +59,7 @@ BG = pygame.transform.scale(pygame.image.load(os.path.join("imgs", "space_bg.png
 # TASK 3: Setup Ship Class
 ############################################################################################
 class Ship: #abstract class. wont be used but only INHERITED
-    COOLDOWN = 30 #used for later 
+    COOLDOWN = 1 #used for later 
 
     def __init__(self, x, y, health=100):
         #attributes
@@ -73,6 +73,18 @@ class Ship: #abstract class. wont be used but only INHERITED
 
     def draw(self, window): # method 
         window.blit(self.ship_img, (self.x, self.y))
+        for laser in self.lasers: #method that will draw the lasers
+            laser.draw(window)
+
+    def move_lasers(self, vel, obj):
+        self.cooldown()
+        for laser in self.lasers: #for loop through all the lasers
+            laser.move(vel) # move laser by the velocity
+            if laser.off_screen(HEIGHT): #if laser off screen
+                self.lasers.remove(laser) #delete laser
+            elif laser.collision(obj): #if laser is colliding with obj
+                obj.health -= 10 #health -10 
+                self.lasers.remove(laser) #removes laser
 
     def cooldown(self): #handles counting the cooldown
         if self.cool_down_counter >= self.COOLDOWN:
@@ -99,6 +111,19 @@ class Hero(Ship):
         self.laser_img = HERO_LASER
         self.mask = pygame.mask.from_surface(self.ship_img) #mask allows for pixel perfect collision 
         self.max_health = health
+    
+    def move_lasers(self, vel, objs):
+        self.cooldown()
+        for laser in self.lasers:
+            laser.move(vel)
+            if laser.off_screen(HEIGHT):
+                self.lasers.remove(laser)
+            else:
+                for obj in objs:
+                    if laser.collision(obj):
+                        objs.remove(obj)
+                        if laser in self.lasers:
+                            self.lasers.remove(laser)
 
 
 class Enemy(Ship):
