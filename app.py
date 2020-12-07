@@ -124,8 +124,13 @@ class Hero(Ship):
                         objs.remove(obj)
                         if laser in self.lasers:
                             self.lasers.remove(laser)
+     
     
-    def healthbar(self, window):
+    def draw(self, window):
+        super().draw(window) #called parent draw method
+        self.healthbar(window)
+    
+    def healthbar(self, window): # tc 14411
         #drew rectangles red and green based on health of hero
         pygame.draw.rect(window, (255,0,0), (self.x, self.y + self.ship_img.get_height() + 10, self.ship_img.get_width(), 10))
         pygame.draw.rect(window, (0,255,0), (self.x, self.y + self.ship_img.get_height() + 10, self.ship_img.get_width() * (self.health/self.max_health), 10))
@@ -195,7 +200,7 @@ def main():
     laser_vel = 4
 
     #create hero variable with hero class and coordinates
-    hero = Hero(300, 650)
+    hero = Hero(300, 630)
 
     clock = pygame.time.Clock() # used to setup actual FPS
 
@@ -268,7 +273,7 @@ def main():
             hero.x += hero_vel
         if keys[pygame.K_w] and hero.y - hero_vel > 0: #up - this makes sure we are not less than 0 when moving up
             hero.y -= hero_vel # subtracts the velocity bs starting position is 0,0 at top left
-        if keys[pygame.K_s] and hero.y + hero_vel + hero.get_height() < HEIGHT: #down - if current y value + velocity is less thatn HEIGHT, then you can move
+        if keys[pygame.K_s] and hero.y + hero_vel + hero.get_height() + 15 < HEIGHT: #down - if current y value + velocity is less thatn HEIGHT, then you can move
             hero.y += hero_vel
         #################################
         # hero's shoots with SPACE
@@ -285,7 +290,7 @@ def main():
             hero.x += hero_vel
         if keys[pygame.K_UP] and hero.y - hero_vel > 0: #up 
             hero.y -= hero_vel 
-        if keys[pygame.K_DOWN] and hero.y + hero_vel + hero.get_height() < HEIGHT: #down
+        if keys[pygame.K_DOWN] and hero.y + hero_vel + hero.get_height() + 15 < HEIGHT: #down
             hero.y += hero_vel
 
         # move the enemies
@@ -301,11 +306,7 @@ def main():
             if collide(enemy, hero):
                 hero.health -= 10
                 enemies.remove(enemy)
-            elif enemy.y + enemy.get_height() > HEIGHT:
-                lives -= 1
-                enemies.remove(enemy)
-
-            if enemy.y + enemy.get_height() > HEIGHT: #if enemy passes the bottom of screen
+            elif enemy.y + enemy.get_height() > HEIGHT: #if enemy passes the bottom of screen
                 lives -= 1 #subtract hero lives
                 enemies.remove(enemy) #removes object from enemies list
 
