@@ -122,7 +122,7 @@ def main():
                 run = False #when user quits the screen, then pygame stops running 
 
         keys = pygame.key.get_pressed() #get the state of all keyboard buttons
-        
+
         #################################
         # hero's movements with WASD
         #################################
@@ -139,14 +139,14 @@ def main():
         #########################################################
         # hero's movements with LEFT , RIGHT, UP, DOWN
         #########################################################
-        if keys[pygame.K_a]: #left
+        if keys[pygame.K_LEFT]: #left
             #to move left i need to subtract from my x value of my player
             ship.x -= hero_vel # move {hero_vel} pixels to the left
-        if keys[pygame.K_d]: #right
+        if keys[pygame.K_RIGHT]: #right
             ship.x += hero_vel
-        if keys[pygame.K_w]: #up
+        if keys[pygame.K_UP]: #up
             ship.y -= hero_vel # subtracts the velocity bs starting position is 0,0 at top left
-        if keys[pygame.K_s]: #down
+        if keys[pygame.K_DOWN]: #down
             ship.y += hero_vel
 
 
