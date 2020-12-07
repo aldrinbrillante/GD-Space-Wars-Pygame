@@ -51,8 +51,27 @@ HERO_LASER = pygame.image.load(os.path.join("imgs", "laser_hero.png"))
     # using pygame.transform.scale to scale x,y image for background 
 BG = pygame.transform.scale(pygame.image.load(os.path.join("imgs", "space_bg.png")), (WIDTH, HEIGHT) )
 
+
 ############################################################################################
-# TASK 2: Setup Pygame Main Loop
+# TASK 3: Setup Ship Class
+############################################################################################
+class Ship: #abstract class. wont be used but only INHERITED
+    def __init__(self, x, y, health=100):
+        #attributes
+        self.x = x
+        self.y = y
+        self.health = health
+        self.ship_img = None #this will allow us to draw the img later
+        self.laser_img = None #this will allow us to draw the img later
+        self.lasers = []
+        self.cool_down_counter = 0 #created so user can't spam lasers during game
+
+    def draw(self): # method 
+
+
+
+############################################################################################
+# TASK 2: Setup Pygame Main Loop for future add-ins
 ############################################################################################
 
 # drawing/ getting main loop setup to handle events
