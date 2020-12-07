@@ -10,7 +10,7 @@
 - Rationale about which properties and methods are made private, protected, or public is provided in code comments or verbally in presentation
 - At least one class demonstrates composition (being composed of other objects)
 - A diagram is provided that shows an overview of all the classes that make up the system design
-- Diagram shows relationships between classes
+- Diagram shows relationheros between classes
 - At least one class inherits from another class
 - The subclass overrides at least one superclass method (this can be init or another method)
 - 5 - 10 min demo presentation is given showing off all of the above requirements

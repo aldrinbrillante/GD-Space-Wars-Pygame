@@ -64,21 +64,44 @@ class Ship: #abstract class. wont be used but only INHERITED
         self.x = x
         self.y = y
         self.health = health
-        self.hero = None #this will allow us to draw the img later
+        self.ship_img = None #this will allow us to draw the img later
         self.laser_img = None #this will allow us to draw the img later
         self.lasers = []
         self.cool_down_counter = 0 #created so user can't spam lasers during game
 
     def draw(self, window): # method 
-        window.blit(self.hero, (self.x, self.y))
+        window.blit(self.ship_img, (self.x, self.y))
+
+    def get_width(self): #func to get width of hero
+        return self.ship_img.get_width()
+
+    def get_height(self): #func to get height of hero
+        return self.ship_img.get_height()  
 
 class Hero(Ship):
     def __init__(self, x, y, health=100):
         super().__init__(x, y, health)
-        self.hero = HERO
+        self.ship_img = HERO
         self.laser_img = HERO_LASER
-        self.mask = pygame.mask.from_surface(self.hero) #mask allows for pixel perfect collision 
+        self.mask = pygame.mask.from_surface(self.ship_img) #mask allows for pixel perfect collision 
         self.max_health = health
+
+
+class Enemy(Ship):
+    COLOR_MAP = { #dictionary 
+                "red": (RED_SHIP, RED_LASER),
+                "green": (GREEN_SHIP, GREEN_LASER),
+                "blue": (BLUE_SHIP, BLUE_LASER)
+                }
+    def __init__(self, x, y, color, health=100):
+        super().__init__(x, y, health)
+        self.ship_img, self.laser_img = self.COLOR_MAP[color]
+        self.mask = pygame.mask.from_surface(self.ship_img)
+    
+    def move(self, vel): # if we pass the velocity to this method, we move the ship 
+        self.y += vel
+    
+
 
 
 
@@ -91,13 +114,17 @@ class Hero(Ship):
 def main():
     run = True # dictates whether while loop below will run or not
     FPS = 60 #frames per second variable
-    level = 1
+    level = 0
     lives = 3
     main_font = pygame.font.SysFont("comicsans", 50) #pygame font type and size 
     hero_vel = 5 #velocity of hero --> to be called during 'if keys'
 
-    #create ship variable with ship class and coordinates
-    ship = Ship(300, 650)
+    enemies = [] #stores our enemies
+    wave_length = 5
+    enemy_vel = 1 #enemy velocity 1 pixel 
+
+    #create hero variable with hero class and coordinates
+    hero = Hero(300, 650)
 
     clock = pygame.time.Clock() # used to setup actual FPS
 
@@ -113,7 +140,10 @@ def main():
         #display level text
         WINDOW.blit(level_display, (WIDTH - level_display.get_width() - 10,10))
 
-        ship.draw(WINDOW)
+        for enemy in enemies:
+            enemy.draw(WINDOW)
+
+        hero.draw(WINDOW)
 
         #update window
         pygame.display.update() #refreshes the display 
@@ -121,8 +151,12 @@ def main():
 
     while run: 
         clock.tick(FPS) #'tick this clock based on the FPS rate given'
-        #calling redraw_window
-        redraw_window()
+
+        if len(enemies) == 0:
+            level =+ 1 # as soon as no more enemies, level increases
+            wave_length =+ 5
+            for i in range(wave_length):
+
 
         #for loop to quit pygame window
         for event in pygame.event.get():
@@ -134,28 +168,30 @@ def main():
         #################################
         # hero's movements with WASD
         #################################
-        if keys[pygame.K_a] and ship.x - hero_vel > 0: #left
+        if keys[pygame.K_a] and hero.x - hero_vel > 0: #left
             #to move left i need to subtract from my x value of my player
-            ship.x -= hero_vel # move {hero_vel} pixels to the left
-        if keys[pygame.K_d] and ship.x + hero_vel < WIDTH: #right
-            ship.x += hero_vel
-        if keys[pygame.K_w] and ship.y - hero_vel > 0: #up - this makes sure we are not less than 0 when moving up
-            ship.y -= hero_vel # subtracts the velocity bs starting position is 0,0 at top left
-        if keys[pygame.K_s] and ship.y + hero_vel < HEIGHT: #down - if current y value + velocity is less thatn HEIGHT, then you can move
-            ship.y += hero_vel
+            hero.x -= hero_vel # move {hero_vel} pixels to the left
+        if keys[pygame.K_d] and hero.x + hero_vel + hero.get_width() < WIDTH: #right
+            hero.x += hero_vel
+        if keys[pygame.K_w] and hero.y - hero_vel > 0: #up - this makes sure we are not less than 0 when moving up
+            hero.y -= hero_vel # subtracts the velocity bs starting position is 0,0 at top left
+        if keys[pygame.K_s] and hero.y + hero_vel + hero.get_height() < HEIGHT: #down - if current y value + velocity is less thatn HEIGHT, then you can move
+            hero.y += hero_vel
         
         #########################################################
         # hero's movements with LEFT , RIGHT, UP, DOWN
         #########################################################
-        if keys[pygame.K_LEFT] and ship.x - hero_vel > 0: #left
-            ship.x -= hero_vel 
-        if keys[pygame.K_RIGHT] and ship.x + hero_vel < WIDTH: #right
-            ship.x += hero_vel
-        if keys[pygame.K_UP] and ship.y - hero_vel > 0: #up 
-            ship.y -= hero_vel 
-        if keys[pygame.K_DOWN] and ship.y + hero_vel < HEIGHT: #down
-            ship.y += hero_vel
+        if keys[pygame.K_LEFT] and hero.x - hero_vel > 0: #left
+            hero.x -= hero_vel 
+        if keys[pygame.K_RIGHT] and hero.x + hero_vel + hero.get_width() < WIDTH: #right
+            hero.x += hero_vel
+        if keys[pygame.K_UP] and hero.y - hero_vel > 0: #up 
+            hero.y -= hero_vel 
+        if keys[pygame.K_DOWN] and hero.y + hero_vel + hero.get_height() < HEIGHT: #down
+            hero.y += hero_vel
 
+        #calling redraw_window
+        redraw_window()
 
 main()
 
