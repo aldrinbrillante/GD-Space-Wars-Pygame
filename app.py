@@ -1,5 +1,8 @@
 #Space Ware Pygame
 
+# Resources:
+# https://www.pygame.org/docs/ref/key.html
+
 # All constants/variables will be in ALL_CAPITAL_LETTERS
 
 
@@ -66,7 +69,9 @@ class Ship: #abstract class. wont be used but only INHERITED
         self.lasers = []
         self.cool_down_counter = 0 #created so user can't spam lasers during game
 
-    def draw(self): # method 
+    def draw(self, window): # method 
+        pygame.draw.rect(window, (255,0,0), (self.x, self.y, 50, 50), 2)
+
 
 
 
@@ -81,7 +86,10 @@ def main():
     level = 1
     lives = 3
     main_font = pygame.font.SysFont("comicsans", 50) #pygame font type and size 
+    hero_vel = 5 #velocity of hero --> to be called during 'if keys'
 
+    #create ship variable with ship class and coordinates
+    ship = Ship(300, 650)
 
     clock = pygame.time.Clock() # used to setup actual FPS
 
@@ -97,6 +105,8 @@ def main():
         #display level text
         WINDOW.blit(level_display, (WIDTH - level_display.get_width() - 10,10))
 
+        ship.draw(WINDOW)
+
         #update window
         pygame.display.update() #refreshes the display 
  
@@ -110,6 +120,35 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False #when user quits the screen, then pygame stops running 
+
+        keys = pygame.key.get_pressed() #get the state of all keyboard buttons
+        
+        #################################
+        # hero's movements with WASD
+        #################################
+        if keys[pygame.K_a]: #left
+            #to move left i need to subtract from my x value of my player
+            ship.x -= hero_vel # move {hero_vel} pixels to the left
+        if keys[pygame.K_d]: #right
+            ship.x += hero_vel
+        if keys[pygame.K_w]: #up
+            ship.y -= hero_vel # subtracts the velocity bs starting position is 0,0 at top left
+        if keys[pygame.K_s]: #down
+            ship.y += hero_vel
+        
+        #########################################################
+        # hero's movements with LEFT , RIGHT, UP, DOWN
+        #########################################################
+        if keys[pygame.K_a]: #left
+            #to move left i need to subtract from my x value of my player
+            ship.x -= hero_vel # move {hero_vel} pixels to the left
+        if keys[pygame.K_d]: #right
+            ship.x += hero_vel
+        if keys[pygame.K_w]: #up
+            ship.y -= hero_vel # subtracts the velocity bs starting position is 0,0 at top left
+        if keys[pygame.K_s]: #down
+            ship.y += hero_vel
+
 
 main()
 
