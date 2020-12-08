@@ -20,7 +20,7 @@ Good luck, Space Cadet!
 https://www.figma.com/file/9yWkrSE7wRwyYHTK8MQt0R/Space-Wars-Diagram?node-id=0%3A1
 
 ## Game Instructions:
-- run app.py or app-v2.py to play!
+- run ***app.py*** or ***app-v2.py*** to play!
 
 
 
