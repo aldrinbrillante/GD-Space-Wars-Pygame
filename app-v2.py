@@ -75,6 +75,7 @@ class Ship: #abstract class. wont be used but only INHERITED
 
     def shoot(self):
         if self.cool_down_counter == 0: # we're not in the process of counting up to a specific cooldown
+            #composition class Laser
             laser = Laser(self.x-20, self.y, self.laser_img) #create a new laser...
             self.lasers.append(laser) #... and add it to the laser list
             self.cool_down_counter = 1 #then set the cooldown counter to start counting up 
