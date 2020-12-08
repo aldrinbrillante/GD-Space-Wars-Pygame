@@ -1,4 +1,4 @@
-#Space Ware Pygame
+#Space Wars Pygame
 # All constants/variables will be in ALL_CAPITAL_LETTERS
 import pygame # documentation: https://www.pygame.org/docs/
 import os
@@ -50,10 +50,10 @@ class Ship: #abstract class. wont be used but only INHERITED
         self.ship_img = None #this will allow us to draw the img later
         self.laser_img = None #this will allow us to draw the img later
         self.lasers = []
-        self.cool_down_counter = 0 #created so user can't spam lasers during game
+        self.cool_down_counter = 0 
 
     def draw(self, window): # method 
-        window.blit(self.ship_img, (self.x, self.y))
+        window.blit(self.ship_img, (self.x, self.y)) #blit allows self.ship_img to be placed/located at said coordinate: x,y
         for laser in self.lasers: #method that will draw the lasers
             laser.draw(window)
 
@@ -75,15 +75,14 @@ class Ship: #abstract class. wont be used but only INHERITED
 
     def shoot(self):
         if self.cool_down_counter == 0: # we're not in the process of counting up to a specific cooldown
-            ######LOOK AT THIS LATER######
             laser = Laser(self.x-20, self.y, self.laser_img) #create a new laser...
             self.lasers.append(laser) #... and add it to the laser list
             self.cool_down_counter = 1 #then set the cooldown counter to start counting up 
 
-    def get_width(self): #func to get width of hero
+    def get_width(self): #func to get width of ship_img
         return self.ship_img.get_width()
 
-    def get_height(self): #func to get height of hero
+    def get_height(self): #func to get height of ship_img
         return self.ship_img.get_height()  
 
 ############################################################################################
@@ -92,6 +91,7 @@ class Ship: #abstract class. wont be used but only INHERITED
 
 class Hero(Ship):
     def __init__(self, x, y, health=100):
+        #parent class referred by super to extend ship func
         super().__init__(x, y, health)
         self.ship_img = HERO
         self.laser_img = HERO_LASER
@@ -116,13 +116,15 @@ class Hero(Ship):
         super().draw(window) #called parent draw method
         self.healthbar(window)
     
-    def terminal_announce(self):
-        if self.max_health < 100:
+    def terminal_announce(self, health):
+        if health < 100:
             print("You're starting to lose health!")
     
-    def healthbar(self, window): # tc 14411
+    def healthbar(self, window):
         #drew rectangles red and green based on health of hero
+        # drawing red rect first... health bar below player(+10)
         pygame.draw.rect(window, (255,0,0), (self.x, self.y + self.ship_img.get_height() + 10, self.ship_img.get_width(), 10))
+        #green
         pygame.draw.rect(window, (0,255,0), (self.x, self.y + self.ship_img.get_height() + 10, self.ship_img.get_width() * (self.health/self.max_health), 10))
 
 ############################################################################################
@@ -136,6 +138,7 @@ class Enemy(Ship):
                 "blue": (BLUE_SHIP, BLUE_LASER)
                 }
     def __init__(self, x, y, color, health=100):
+        """ Init enemy objects """
         super().__init__(x, y, health)
         self.ship_img, self.laser_img = self.COLOR_MAP[color]
         self.mask = pygame.mask.from_surface(self.ship_img)
@@ -159,7 +162,7 @@ class Laser:
         self.mask = pygame.mask.from_surface(self.img)
 
     def draw(self, window):
-        window.blit(self.img, (self.x, self.y))
+        window.blit(self.img, (self.x, self.y)) #blit allows make WINDOW surface to be placed/located at said coordinate: x,y
     
     def move(self, vel):
         self.y += vel
@@ -180,7 +183,7 @@ def main():
     run = True # dictates whether while loop below will run or not
     FPS = 60 #frames per second variable
     level = 0
-    lives = 3
+    lives = 3 #starting amount 
     main_font = pygame.font.SysFont("dejavuserif", 100) #pygame font type and size 
     lost_font = pygame.font.SysFont("dejavuserif", 200) #pygame font type and size for lost game
 
@@ -199,12 +202,12 @@ def main():
     lost = False #lost variable
     lost_count = 0
 
-    def redraw_window():
+    def redraw_window(): #game text stuff
         WINDOW.blit(BG, (0, 0)) #blit allows make WINDOW surface to be placed/located at said coordinate: 0,0
 
         #draw text
         lives_display = main_font.render(f"Lives: {lives}", 1, (255,255,255)) #RGB-Red,Green,Blue  
-        level_display = main_font.render(f"Level: {level}", 1, (255,255,255)) #RGB-Red,Green,Blue
+        level_display = main_font.render(f"Current Level: {level}", 1, (255,255,255)) #RGB-Red,Green,Blue
 
         #display lives text
         WINDOW.blit(lives_display, (10,10))
