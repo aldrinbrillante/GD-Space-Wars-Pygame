@@ -6,9 +6,11 @@
 
  Survive as long as you can against all enemies that approach you, and don't let them reach the bottom of your screen!
 
- Use ***WASD*** or the ***ARROW KEYS*** to move your last ship!
+ - Use ***WASD*** or the ***ARROW KEYS*** to move your last ship!
 
-    - Hold both directional keys to use your turbo!
+- Hold both directional keys to use your turbo!
+
+- Press/Hold ***SPACEBAR*** to shoot your blasters!
 
 Keep tabs on your health bar and your life count!
 
