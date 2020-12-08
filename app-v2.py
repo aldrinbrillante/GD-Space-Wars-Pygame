@@ -347,3 +347,4 @@ def main_menu():
 # CALL MAIN MENU TO START GAME
 ############################################################################################
 main_menu()
+#all methods are set to pblic because all methods are needed for everyone since using abstract class to call 
