@@ -189,8 +189,8 @@ def main():
     FPS = 60 #frames per second variable
     level = 0
     lives = 3
-    main_font = pygame.font.SysFont("comicsans", 50) #pygame font type and size 
-    lost_font = pygame.font.SysFont("comicsans", 200) #pygame font type and size for lost game
+    main_font = pygame.font.SysFont("dejavuserif", 100) #pygame font type and size 
+    lost_font = pygame.font.SysFont("dejavuserif", 200) #pygame font type and size for lost game
 
     enemies = [] #stores our enemies
     wave_length = 5
@@ -313,5 +313,34 @@ def main():
         
         hero.move_lasers(-laser_vel, enemies) # this checks if laser has collided with any of the enemies...negative to make sure laser goes up
 
-main()
+#main menu
+def main_menu():
+    header = pygame.font.SysFont("Ariel", 150)
+    intro_font = pygame.font.SysFont("Ariel", 50)
+    run = True
+    while run:
+        WINDOW.blit(BG, (0,0))
+        intro_0 = header.render("Space Wars", 1, (255,255,255))
+        intro_1 = intro_font.render("Directions:", 1, (255,255,255))
+        intro_1 = intro_font.render("Use the WASD and Arrow keys to move and turbo", 1, (255,255,255))
+        intro_2 = intro_font.render("Press or hold the SPACEBAR to shoot your blaster", 1, (255,255,255))
+        intro_3 = intro_font.render("Keep watch of your health bar and lives!", 1, (255,255,255))
+        intro_4 = intro_font.render("CLICK TO BEGIN THE WAR", 1, (255,255,255))
+
+        WINDOW.blit(intro_0, (WIDTH/2 - intro_0.get_width()/2, 50))
+        WINDOW.blit(intro_1, (WIDTH/2 - intro_1.get_width()/2, 250))
+        WINDOW.blit(intro_2, (WIDTH/2 - intro_2.get_width()/2, 350))
+        WINDOW.blit(intro_3, (WIDTH/2 - intro_3.get_width()/2, 450))
+        WINDOW.blit(intro_4, (WIDTH/2 - intro_4.get_width()/2, 650))
+
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+            if event.type == pygame.MOUSEBUTTONDOWN: # if we press mouse, we enter the main loop to start playing 
+                main()
+    pygame.quit()
+
+main_menu()
+#14908
 
