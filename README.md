@@ -14,6 +14,10 @@ Keep tabs on your health bar and your life count!
 
 Good luck, Space Cadet!
 
+## Diagram:
+https://www.figma.com/file/9yWkrSE7wRwyYHTK8MQt0R/Space-Wars-Diagram?node-id=0%3A1
+
+
 
 
 ## For this project, these are the following requirements:
@@ -29,7 +33,3 @@ Good luck, Space Cadet!
 - At least one class inherits from another class
 - The subclass overrides at least one superclass method (this can be init or another method)
 - 5 - 10 min demo presentation is given showing off all of the above requirements
-
-
-Pseudocode/Self Notes:
-- all constants/variables will be in ALL_CAPITAL_LETTERS
