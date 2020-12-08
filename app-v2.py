@@ -75,6 +75,7 @@ class Ship: #abstract class. wont be used but only INHERITED
 
     def shoot(self):
         if self.cool_down_counter == 0: # we're not in the process of counting up to a specific cooldown
+            ######LOOK AT THIS LATER######
             laser = Laser(self.x-20, self.y, self.laser_img) #create a new laser...
             self.lasers.append(laser) #... and add it to the laser list
             self.cool_down_counter = 1 #then set the cooldown counter to start counting up 
@@ -114,6 +115,10 @@ class Hero(Ship):
     def draw(self, window):
         super().draw(window) #called parent draw method
         self.healthbar(window)
+    
+    def terminal_announce(self):
+        if self.max_health < 100:
+            print("You're starting to lose health!")
     
     def healthbar(self, window): # tc 14411
         #drew rectangles red and green based on health of hero
