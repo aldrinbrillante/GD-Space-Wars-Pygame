@@ -1,13 +1,19 @@
 # GD-Space-Wars-Pygame
- Space Wars - OOP Design Challenge
+ **Project: Space Wars - OOP Design Challenge**
 
  ## Description:
  You are the lone survivor of your rebellion space fleet protecting your planet X.
+
  Survive as long as you can against all enemies that approach you, and don't let them reach the bottom of your screen!
+
  Use ***WASD*** or the ***ARROW KEYS*** to move your last ship!
+
     - Hold both directional keys to use your turbo!
+
 Keep tabs on your health bar and your life count!
-Good luck!
+
+Good luck, Space Cadet!
+
 
 
 ## For this project, these are the following requirements:
